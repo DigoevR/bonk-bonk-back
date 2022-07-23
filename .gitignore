@@ -1,0 +1,5 @@
+*.pyc
+*.sqlite3
+*.ini
+/static/
+__pycache__

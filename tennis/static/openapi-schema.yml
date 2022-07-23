@@ -3,7 +3,7 @@ info:
   title: ''
   version: ''
 paths:
-  /api/user:
+  /api/user/:
     get:
       operationId: retrieveUser
       description: ''
@@ -74,7 +74,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/user/{id}:
+  /api/user/{id}/:
     get:
       operationId: retrieveUser
       description: ''
@@ -94,7 +94,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/users:
+  /api/users/:
     get:
       operationId: listUsers
       description: ''
@@ -110,7 +110,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/auth/login:
+  /api/auth/login/:
     post:
       operationId: createLogin
       description: ''
@@ -131,7 +131,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/auth/logout:
+  /api/auth/logout/:
     post:
       operationId: createLogout
       description: ''
@@ -152,7 +152,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/auth/logoutall:
+  /api/auth/logoutall/:
     post:
       operationId: createLogoutAll
       description: 'Log the user out of all sessions
@@ -172,6 +172,31 @@ paths:
           content:
             application/json:
               schema: {}
+          description: ''
+      tags:
+      - api
+  /api/auth/sign-up/:
+    post:
+      operationId: createRegisterUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RegisterUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RegisterUser'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterUser'
           description: ''
       tags:
       - api
@@ -203,3 +228,37 @@ components:
       - username
       - first_name
       - last_name
+    RegisterUser:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 40
+        first_name:
+          type: string
+          maxLength: 40
+        last_name:
+          type: string
+          maxLength: 40
+        paternal_name:
+          type: string
+          maxLength: 40
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        elo:
+          type: integer
+          readOnly: true
+        password1:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+      required:
+      - username
+      - first_name
+      - last_name
+      - password1
+      - password2

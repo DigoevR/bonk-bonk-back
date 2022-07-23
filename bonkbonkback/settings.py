@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'bonkbonkback.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-if DEBUG:
+if os.environ.get("DJANGO_IS_LOCAL"):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',

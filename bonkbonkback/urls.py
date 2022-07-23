@@ -26,7 +26,7 @@ urlpatterns = [
     path('api/auth/', include('custom_auth.urls')),
     path('api/', include('tennis.urls')),
     
-    path('swagger-ui', TemplateView.as_view(
+    path('swagger-ui/', TemplateView.as_view(
         template_name='swagger-ui.html',
         extra_context={'schema_url':'static/openapi-schema.yml'},
     ), name='swagger-ui'),

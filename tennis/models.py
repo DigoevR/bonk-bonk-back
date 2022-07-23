@@ -1,3 +1,53 @@
-from django.db import models
+from django.conf import settings
+from django.db import models, transaction
 
-# Create your models here.
+class Match(models.Model):
+    requesting_player = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='matches', on_delete=models.CASCADE)
+    confirming_player = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='_matches', on_delete=models.CASCADE)
+    result = models.BooleanField()
+    is_confirmed = models.BooleanField(default=False)
+    elo_change = models.SmallIntegerField()
+
+    @property
+    def winner(self):
+        return self.requesting_player if self.result else self.confirming_player
+
+    @property
+    def loser(self):
+        return self.confirming_player if self.result else self.requesting_player
+
+    def confirm(self):
+        self.is_confirmed = True
+        requesting_player = self.requesting_player
+        confirming_player = self.confirming_player
+        requesting_player.elo += self.elo_change
+        confirming_player.elo -= self.elo_change
+        with transaction.Atomic():
+            requesting_player.save()
+            confirming_player.save()
+            self.save()
+
+    def calculate_elo_change(self):
+        r_a = self.requesting_player.elo
+        r_b = self.confirming_player.elo
+        K = 40
+        return K / (1 + 10 ** ((r_a - r_b) / 400))
+        
+
+
+class Game(models.Model):
+    match = models.ForeignKey(Match, related_name='games', on_delete=models.CASCADE)
+    requesting_player_score = models.PositiveSmallIntegerField()
+    confirming_player_score = models.PositiveSmallIntegerField()
+
+    @property
+    def result(self):
+        return self.requesting_player_score > self.confirming_player_score
+
+    @property
+    def winner(self):
+        return self.match.requesting_player if self.result else self.match.confirming_player
+
+    @property
+    def loser(self):
+        return self.match.confirming_player if self.result else self.match.requesting_player

@@ -3,7 +3,7 @@ info:
   title: ''
   version: ''
 paths:
-  /auth/user/:
+  /api/user:
     get:
       operationId: retrieveUser
       description: ''
@@ -16,7 +16,7 @@ paths:
                 $ref: '#/components/schemas/User'
           description: ''
       tags:
-      - auth
+      - api
     put:
       operationId: updateUser
       description: ''
@@ -40,7 +40,7 @@ paths:
                 $ref: '#/components/schemas/User'
           description: ''
       tags:
-      - auth
+      - api
     patch:
       operationId: partialUpdateUser
       description: ''
@@ -64,7 +64,7 @@ paths:
                 $ref: '#/components/schemas/User'
           description: ''
       tags:
-      - auth
+      - api
     delete:
       operationId: destroyUser
       description: ''
@@ -73,8 +73,44 @@ paths:
         '204':
           description: ''
       tags:
-      - auth
-  /auth/login/:
+      - api
+  /api/user/{id}:
+    get:
+      operationId: retrieveUser
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - api
+  /api/users:
+    get:
+      operationId: listUsers
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - api
+  /api/auth/login:
     post:
       operationId: createLogin
       description: ''
@@ -94,8 +130,8 @@ paths:
               schema: {}
           description: ''
       tags:
-      - auth
-  /auth/logout/:
+      - api
+  /api/auth/logout:
     post:
       operationId: createLogout
       description: ''
@@ -115,8 +151,8 @@ paths:
               schema: {}
           description: ''
       tags:
-      - auth
-  /auth/logoutall/:
+      - api
+  /api/auth/logoutall:
     post:
       operationId: createLogoutAll
       description: 'Log the user out of all sessions
@@ -138,7 +174,7 @@ paths:
               schema: {}
           description: ''
       tags:
-      - auth
+      - api
 components:
   schemas:
     User:

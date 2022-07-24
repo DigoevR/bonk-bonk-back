@@ -163,3 +163,5 @@ REST_KNOX = {
 }
 
 AUTH_USER_MODEL = 'custom_auth.User'
+
+CSRF_TRUSTED_ORIGINS = ['127.0.0.1', 'https://bonk-bonk.herokuapp.com']

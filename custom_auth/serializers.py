@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework import serializers, validators
 from .models import User
 from django.contrib.auth.password_validation import validate_password
 
@@ -6,11 +6,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'paternal_name', 'email', 'elo')
-        read_only_fields = ('elo',)
+        fields = ('id', 'username', 'first_name', 'last_name', 'paternal_name', 'email', 'elo')
+        read_only_fields = ('elo', 'id')
+
 
 class RegisterUserSerializer(serializers.ModelSerializer):
-    password1 = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password1 = serializers.CharField(write_only=True, required=True, validators=(validate_password,))
     password2 = serializers.CharField(write_only=True, required=True)
 
     def validate(self, attrs):
@@ -29,5 +30,9 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'paternal_name', 'email', 'elo', 'password1', 'password2')
-        read_only_fields = ('elo',)
+        fields = ('id', 'username', 'first_name', 'last_name', 'paternal_name', 'email', 'elo', 'password1', 'password2')
+        read_only_fields = ('elo', 'id')
+
+
+class UsernameValidationSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=40, validators=(validators.UniqueValidator(User.objects.all(), message='Username already exists'),))

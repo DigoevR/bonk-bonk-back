@@ -200,11 +200,35 @@ paths:
           description: ''
       tags:
       - api
+  /api/auth/check-username/:
+    post:
+      operationId: createCheckUsername
+      description: Validate username field
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - api
 components:
   schemas:
     User:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         username:
           type: string
           maxLength: 40
@@ -231,6 +255,9 @@ components:
     RegisterUser:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         username:
           type: string
           maxLength: 40

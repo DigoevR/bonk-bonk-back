@@ -1,12 +1,19 @@
 from django.conf import settings
 from django.db import models, transaction
 
+
 class Match(models.Model):
+    class MatchType(models.IntegerChoices):
+        BO1 = 1, 'Best of 1'
+        BO3 = 3, 'Best of 3'
+        BO5 = 5, 'Best of 5'
+    
     requesting_player = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='matches', on_delete=models.CASCADE)
     confirming_player = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='_matches', on_delete=models.CASCADE)
     result = models.BooleanField()
     is_confirmed = models.BooleanField(default=False)
     elo_change = models.SmallIntegerField()
+    match_type = models.PositiveSmallIntegerField(choices=MatchType.choices)
 
     @property
     def winner(self):
@@ -31,7 +38,7 @@ class Match(models.Model):
         r_a = self.requesting_player.elo
         r_b = self.confirming_player.elo
         K = 40
-        return K / (1 + 10 ** ((r_a - r_b) / 400))
+        self.elo_change = K / (1 + 10 ** ((r_a - r_b) / 400))
         
 
 
@@ -51,3 +58,11 @@ class Game(models.Model):
     @property
     def loser(self):
         return self.match.confirming_player if self.result else self.match.requesting_player
+
+    @property
+    def winner_score(self):
+        return max(self.requesting_player_score, self.confirming_player_score)
+
+    @property
+    def loser_score(self):
+        return min(self.requesting_player_score, self.confirming_player_score)

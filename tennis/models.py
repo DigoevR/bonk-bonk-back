@@ -25,20 +25,20 @@ class Match(models.Model):
 
     def confirm(self):
         self.is_confirmed = True
-        requesting_player = self.requesting_player
-        confirming_player = self.confirming_player
-        requesting_player.elo += self.elo_change
-        confirming_player.elo -= self.elo_change
+        winner = self.winner
+        loser = self.loser
+        winner.elo += self.elo_change
+        loser.elo -= self.elo_change
         with transaction.Atomic():
-            requesting_player.save()
-            confirming_player.save()
+            winner.save()
+            loser.save()
             self.save()
 
     def calculate_elo_change(self):
-        r_a = self.requesting_player.elo
-        r_b = self.confirming_player.elo
+        r_a = self.winner.elo
+        r_b = self.loser.elo
         K = 40
-        self.elo_change = K / (1 + 10 ** ((r_a - r_b) / 400))
+        self.elo_change = K* (1 - 1 / (1 + 10 ** ((r_b - r_a) / 400)))
         
 
 

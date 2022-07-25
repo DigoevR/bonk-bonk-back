@@ -139,19 +139,19 @@ STATIC_ROOT = BASE_DIR / 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': [
+    'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
-    ],
-    'DEFAULT_PARSER_CLASSES': [
+    ),
+    'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser'
-    ],
-    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': ['knox.auth.TokenAuthentication',],
 }
 if DEBUG:
-    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += ('rest_framework.authentication.SessionAuthentication',)
+    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += ['rest_framework.authentication.SessionAuthentication',]
 
 REST_KNOX = {
   'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
@@ -164,4 +164,4 @@ REST_KNOX = {
 
 AUTH_USER_MODEL = 'custom_auth.User'
 
-CSRF_TRUSTED_ORIGINS = ['127.0.0.1', 'https://bonk-bonk.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'https://bonk-bonk.herokuapp.com']

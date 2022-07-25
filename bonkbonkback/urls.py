@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework.schemas import get_schema_view
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
@@ -30,5 +29,6 @@ urlpatterns = [
         template_name='swagger-ui.html',
         extra_context={'schema_url':'static/openapi-schema.yml'},
     ), name='swagger-ui'),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     

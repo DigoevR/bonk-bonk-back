@@ -27,16 +27,20 @@ class MatchSerializer(serializers.ModelSerializer):
     opponent_id = serializers.PrimaryKeyRelatedField(source='confirming_player', required=True, queryset=User.objects.all(), write_only=True)
     winner = UserSerializer(read_only=True)
     loser = UserSerializer(read_only=True)
-    
+
     def validate(self, attrs):
         validation = super().validate(attrs)
+        if self.context['request'].user == validation['confirming_player']:
+            raise serializers.ValidationError({'opponent_id': 'You cannot create a match with yourself'})
         games = attrs['games']
         if len(attrs['games']) > attrs['match_type']:
             raise serializers.ValidationError({'games': 'Too many games for this type of match'})
+        
         games_results = [game['requesting_player_score'] > game['confirming_player_score'] for game in games]
         wins = len(list(filter(lambda x: x, games_results)))
         loses = len(games_results) - wins
         validation['result'] = wins > loses
+
         if max(wins, loses) < attrs['match_type'] // 2 + 1:
             raise serializers.ValidationError({'games': 'Not enough games'})
         return validation

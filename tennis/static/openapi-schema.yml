@@ -6,7 +6,11 @@ paths:
   /api/user/:
     get:
       operationId: retrieveUser
-      description: ''
+      description: 'GET shows current user.
+
+        PATCH updates current user (all fields are considered unrequired when updating).
+
+        DELETE deletes current user.'
       parameters: []
       responses:
         '200':
@@ -19,7 +23,11 @@ paths:
       - api
     put:
       operationId: updateUser
-      description: ''
+      description: 'GET shows current user.
+
+        PATCH updates current user (all fields are considered unrequired when updating).
+
+        DELETE deletes current user.'
       parameters: []
       requestBody:
         content:
@@ -43,7 +51,11 @@ paths:
       - api
     patch:
       operationId: partialUpdateUser
-      description: ''
+      description: 'GET shows current user.
+
+        PATCH updates current user (all fields are considered unrequired when updating).
+
+        DELETE deletes current user.'
       parameters: []
       requestBody:
         content:
@@ -67,7 +79,11 @@ paths:
       - api
     delete:
       operationId: destroyUser
-      description: ''
+      description: 'GET shows current user.
+
+        PATCH updates current user (all fields are considered unrequired when updating).
+
+        DELETE deletes current user.'
       parameters: []
       responses:
         '204':
@@ -77,7 +93,7 @@ paths:
   /api/user/{id}/:
     get:
       operationId: retrieveUser
-      description: ''
+      description: GET shows user with given id.
       parameters:
       - name: id
         in: path
@@ -97,7 +113,7 @@ paths:
   /api/users/:
     get:
       operationId: listUsers
-      description: ''
+      description: GET shows list of all users.
       parameters: []
       responses:
         '200':
@@ -107,46 +123,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-          description: ''
-      tags:
-      - api
-  /api/matches/:
-    get:
-      operationId: listMatchs
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Match'
-          description: ''
-      tags:
-      - api
-    post:
-      operationId: createMatch
-      description: ''
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Match'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Match'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Match'
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Match'
           description: ''
       tags:
       - api
@@ -236,6 +212,67 @@ paths:
           description: ''
       tags:
       - api
+  /api/matches/:
+    get:
+      operationId: listMatchs
+      description: 'GET returns all matches for logged in user.
+
+        POST creates an unconfirmed match.'
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Match'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createMatch
+      description: 'GET returns all matches for logged in user.
+
+        POST creates an unconfirmed match.'
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Match'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Match'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Match'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Match'
+          description: ''
+      tags:
+      - api
+  /api/matches/unconfirmed/:
+    get:
+      operationId: listMatchs
+      description: Get returns list of matches, that are awaiting confirmation by
+        user.
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Match'
+          description: ''
+      tags:
+      - api
   /api/auth/login/:
     post:
       operationId: createLogin
@@ -303,26 +340,26 @@ paths:
       - api
   /api/auth/sign-up/:
     post:
-      operationId: createRegisterUser
+      operationId: createUser
       description: ''
       parameters: []
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterUser'
+              $ref: '#/components/schemas/User'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/RegisterUser'
+              $ref: '#/components/schemas/User'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/RegisterUser'
+              $ref: '#/components/schemas/User'
       responses:
         '201':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RegisterUser'
+                $ref: '#/components/schemas/User'
           description: ''
       tags:
       - api
@@ -374,10 +411,14 @@ components:
         elo:
           type: integer
           readOnly: true
+        password:
+          type: string
+          writeOnly: true
       required:
       - username
       - first_name
       - last_name
+      - password
     Match:
       type: object
       properties:
@@ -435,10 +476,14 @@ components:
                   elo:
                     type: integer
                     readOnly: true
+                  password:
+                    type: string
+                    writeOnly: true
                 required:
                 - username
                 - first_name
                 - last_name
+                - password
                 readOnly: true
               loser:
                 type: object
@@ -465,10 +510,14 @@ components:
                   elo:
                     type: integer
                     readOnly: true
+                  password:
+                    type: string
+                    writeOnly: true
                 required:
                 - username
                 - first_name
                 - last_name
+                - password
                 readOnly: true
               winner_score:
                 type: string
@@ -507,10 +556,14 @@ components:
             elo:
               type: integer
               readOnly: true
+            password:
+              type: string
+              writeOnly: true
           required:
           - username
           - first_name
           - last_name
+          - password
           readOnly: true
         loser:
           type: object
@@ -537,10 +590,14 @@ components:
             elo:
               type: integer
               readOnly: true
+            password:
+              type: string
+              writeOnly: true
           required:
           - username
           - first_name
           - last_name
+          - password
           readOnly: true
         elo_change:
           type: integer
@@ -552,40 +609,3 @@ components:
       - match_type
       - opponent_id
       - games
-    RegisterUser:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        username:
-          type: string
-          maxLength: 40
-        first_name:
-          type: string
-          maxLength: 40
-        last_name:
-          type: string
-          maxLength: 40
-        paternal_name:
-          type: string
-          maxLength: 40
-        email:
-          type: string
-          format: email
-          maxLength: 254
-        elo:
-          type: integer
-          readOnly: true
-        password1:
-          type: string
-          writeOnly: true
-        password2:
-          type: string
-          writeOnly: true
-      required:
-      - username
-      - first_name
-      - last_name
-      - password1
-      - password2

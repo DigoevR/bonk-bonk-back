@@ -12,6 +12,11 @@ from rest_framework.request import Request
 
 
 class CurrentUserView(RetrieveUpdateDestroyAPIView):
+    """
+    GET shows current user.
+    PATCH updates current user (all fields are considered unrequired when updating).
+    DELETE deletes current user.
+    """
     permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
     def get_object(self):
@@ -19,12 +24,18 @@ class CurrentUserView(RetrieveUpdateDestroyAPIView):
 
 
 class UserDetailView(RetrieveAPIView):
+    """
+    GET shows user with given id.
+    """
     permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
 
 class UserListView(ListAPIView):
+    """
+    GET shows list of all users.
+    """
     permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
@@ -73,3 +84,14 @@ class MatchDetailConfirmRejectView(RetrieveAPIView):
         match = get_object_or_404(Match.objects.filter(is_confirmed=False, confirming_player=user), pk=pk)
         match.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class MatchUnconfirmedListView(ListAPIView):
+    """
+    Get returns list of matches, that are awaiting confirmation by user.
+    """
+    permission_classes = (IsAuthenticated,)
+    serializer_class = MatchSerializer
+    def get_queryset(self):
+        user = self.request.user
+        return Match.objects.filter(is_confirmed=False, confirming_player=user)

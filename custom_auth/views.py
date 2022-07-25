@@ -4,7 +4,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .serializers import RegisterUserSerializer, UsernameValidationSerializer
+from .serializers import UserSerializer, UsernameValidationSerializer
 from .permissions import UnauthenticatedOnlyPermission
 
 class LoginView(KnoxLoginView):
@@ -12,7 +12,7 @@ class LoginView(KnoxLoginView):
 
 class SignupView(CreateAPIView):
     permission_classes = (UnauthenticatedOnlyPermission,)
-    serializer_class = RegisterUserSerializer
+    serializer_class = UserSerializer
 
 class CheckUsernameView(APIView):
     """Validate username field"""

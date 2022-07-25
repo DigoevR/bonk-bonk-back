@@ -110,6 +110,66 @@ paths:
           description: ''
       tags:
       - api
+  /api/match/{id}/:
+    get:
+      operationId: retrieveMatch
+      description: 'Returns details about match via GET and confirms match via POST.
+
+        Details about unconfirmed matches, that are not created by user or awaiting
+        confirmation by user return 404.
+
+        Trying to confirm a match that you cannot confirm will return 404.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Match'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createMatch
+      description: 'Returns details about match via GET and confirms match via POST.
+
+        Details about unconfirmed matches, that are not created by user or awaiting
+        confirmation by user return 404.
+
+        Trying to confirm a match that you cannot confirm will return 404.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Match'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Match'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Match'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Match'
+          description: ''
+      tags:
+      - api
   /api/auth/login/:
     post:
       operationId: createLogin
@@ -277,43 +337,6 @@ components:
       - username
       - first_name
       - last_name
-    RegisterUser:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        username:
-          type: string
-          maxLength: 40
-        first_name:
-          type: string
-          maxLength: 40
-        last_name:
-          type: string
-          maxLength: 40
-        paternal_name:
-          type: string
-          maxLength: 40
-        email:
-          type: string
-          format: email
-          maxLength: 254
-        elo:
-          type: integer
-          readOnly: true
-        password1:
-          type: string
-          writeOnly: true
-        password2:
-          type: string
-          writeOnly: true
-      required:
-      - username
-      - first_name
-      - last_name
-      - password1
-      - password2
     Match:
       type: object
       properties:
@@ -486,3 +509,40 @@ components:
       - match_type
       - opponent_id
       - games
+    RegisterUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          maxLength: 40
+        first_name:
+          type: string
+          maxLength: 40
+        last_name:
+          type: string
+          maxLength: 40
+        paternal_name:
+          type: string
+          maxLength: 40
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        elo:
+          type: integer
+          readOnly: true
+        password1:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+      required:
+      - username
+      - first_name
+      - last_name
+      - password1
+      - password2

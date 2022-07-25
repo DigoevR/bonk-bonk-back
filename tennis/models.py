@@ -29,7 +29,7 @@ class Match(models.Model):
         loser = self.loser
         winner.elo += self.elo_change
         loser.elo -= self.elo_change
-        with transaction.Atomic():
+        with transaction.atomic():
             winner.save()
             loser.save()
             self.save()

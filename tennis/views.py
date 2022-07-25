@@ -1,4 +1,3 @@
-from email import message
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveAPIView, ListAPIView, CreateAPIView
 from custom_auth.serializers import UserSerializer
@@ -8,6 +7,7 @@ from tennis.models import Match
 from tennis.serializers import MatchSerializer
 from django.db.models import Q
 from rest_framework.response import Response
+from rest_framework import status
 
 
 class CurrentUserView(RetrieveUpdateDestroyAPIView):
@@ -36,11 +36,11 @@ class MatchCreateView(CreateAPIView):
         serializer.save(requesting_player=self.request.user)
 
 
-class MatchDetailConfirmView(RetrieveAPIView):
+class MatchDetailConfirmRejectView(RetrieveAPIView):
     """
-    Returns details about match via GET and confirms match via POST.
+    Returns details about match via GET, confirms unconfirmed match via POST and rejects unconfirmed match via DELETE.
     Details about unconfirmed matches, that are not created by user or awaiting confirmation by user return 404.
-    Trying to confirm a match that you cannot confirm will return 404.
+    Trying to confirm or reject a match that you cannot confirm or reject will return 404.
     """
     permission_classes = (IsAuthenticated,)
     serializer_class = MatchSerializer
@@ -52,4 +52,10 @@ class MatchDetailConfirmView(RetrieveAPIView):
         user = self.request.user
         match = get_object_or_404(Match.objects.filter(is_confirmed=False, confirming_player=user), pk=pk)
         match.confirm()
-        return Response(self.serializer_class(match).data) 
+        return Response(self.serializer_class(match).data)
+
+    def delete(self, request, pk):
+        user = self.request.user
+        match = get_object_or_404(Match.objects.filter(is_confirmed=False, confirming_player=user), pk=pk)
+        match.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

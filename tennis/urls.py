@@ -9,5 +9,5 @@ urlpatterns = [
     path('users/', dv.UserListView.as_view(), name='user_list'),
 
     path('match/', dv.MatchCreateView.as_view(), name='match_create'),
-    path('match/<int:pk>/', dv.MatchDetailConfirmView.as_view(), name='match_detail_confirm')
+    path('match/<int:pk>/', dv.MatchDetailConfirmRejectView.as_view(), name='match_detail_confirm')
 ]

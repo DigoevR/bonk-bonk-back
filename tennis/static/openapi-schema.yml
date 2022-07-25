@@ -113,12 +113,14 @@ paths:
   /api/match/{id}/:
     get:
       operationId: retrieveMatch
-      description: 'Returns details about match via GET and confirms match via POST.
+      description: 'Returns details about match via GET, confirms unconfirmed match
+        via POST and rejects unconfirmed match via DELETE.
 
         Details about unconfirmed matches, that are not created by user or awaiting
         confirmation by user return 404.
 
-        Trying to confirm a match that you cannot confirm will return 404.'
+        Trying to confirm or reject a match that you cannot confirm or reject will
+        return 404.'
       parameters:
       - name: id
         in: path
@@ -137,12 +139,14 @@ paths:
       - api
     post:
       operationId: createMatch
-      description: 'Returns details about match via GET and confirms match via POST.
+      description: 'Returns details about match via GET, confirms unconfirmed match
+        via POST and rejects unconfirmed match via DELETE.
 
         Details about unconfirmed matches, that are not created by user or awaiting
         confirmation by user return 404.
 
-        Trying to confirm a match that you cannot confirm will return 404.'
+        Trying to confirm or reject a match that you cannot confirm or reject will
+        return 404.'
       parameters:
       - name: id
         in: path
@@ -167,6 +171,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Match'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyMatch
+      description: 'Returns details about match via GET, confirms unconfirmed match
+        via POST and rejects unconfirmed match via DELETE.
+
+        Details about unconfirmed matches, that are not created by user or awaiting
+        confirmation by user return 404.
+
+        Trying to confirm or reject a match that you cannot confirm or reject will
+        return 404.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
           description: ''
       tags:
       - api

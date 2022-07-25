@@ -110,6 +110,46 @@ paths:
           description: ''
       tags:
       - api
+  /api/matches/:
+    get:
+      operationId: listMatchs
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Match'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createMatch
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Match'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Match'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Match'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Match'
+          description: ''
+      tags:
+      - api
   /api/match/{id}/:
     get:
       operationId: retrieveMatch
@@ -307,31 +347,6 @@ paths:
           description: ''
       tags:
       - api
-  /api/match/:
-    post:
-      operationId: createMatch
-      description: ''
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Match'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Match'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Match'
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Match'
-          description: ''
-      tags:
-      - api
 components:
   schemas:
     User:
@@ -372,6 +387,8 @@ components:
           - 3
           - 5
           type: integer
+          minimum: 0
+          maximum: 32767
         opponent_id:
           type: integer
           writeOnly: true

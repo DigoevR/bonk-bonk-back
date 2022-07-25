@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveAPIView, ListAPIView, CreateAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveAPIView, ListAPIView, CreateAPIView, ListCreateAPIView
 from custom_auth.serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated
 from custom_auth.models import User
@@ -8,6 +8,7 @@ from tennis.serializers import MatchSerializer
 from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.request import Request
 
 
 class CurrentUserView(RetrieveUpdateDestroyAPIView):
@@ -28,12 +29,24 @@ class UserListView(ListAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     
+    def list(self, request: Request, *args, **kwargs) -> Response:
+        return super().list(request, *args, **kwargs)
+    
 
-class MatchCreateView(CreateAPIView):
+class MatchListCreateView(ListCreateAPIView):
+    """
+    GET returns all matches for logged in user.
+    POST creates an unconfirmed match.
+    """
     permission_classes = (IsAuthenticated,)
     serializer_class = MatchSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Match.objects.filter(Q(requesting_player=user) | Q(confirming_player=user))
+
     def perform_create(self, serializer):
-        serializer.save(requesting_player=self.request.user)
+        serializer.save(requesting_player=self.request.user)    
 
 
 class MatchDetailConfirmRejectView(RetrieveAPIView):
@@ -44,6 +57,7 @@ class MatchDetailConfirmRejectView(RetrieveAPIView):
     """
     permission_classes = (IsAuthenticated,)
     serializer_class = MatchSerializer
+
     def get_queryset(self):
         user = self.request.user
         return Match.objects.filter(Q(is_confirmed=True) | Q(requesting_player=user) | Q(confirming_player=user))

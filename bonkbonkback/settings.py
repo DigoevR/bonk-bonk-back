@@ -27,7 +27,7 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-kd(8p(zn*3=dx+(zhj7()m$9h3r#3dw9$a5$s_sairpowbmbwn' if DEBUG else os.environ.get('DJANGO_SECRET')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['http://127.0.0.1', 'https://bonk-bonk.herokuapp.com']
 
 
 # Application definition
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -130,7 +131,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static/'
 
 # Default primary key field type

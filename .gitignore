@@ -3,3 +3,6 @@
 *.ini
 /static/
 __pycache__
+.vscode
+.env
+setup.cfg

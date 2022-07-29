@@ -27,7 +27,7 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-kd(8p(zn*3=dx+(zhj7()m$9h3r#3dw9$a5$s_sairpowbmbwn' if DEBUG else os.environ.get('DJANGO_SECRET')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'bonk-bonk.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', 'bonk-bonk.herokuapp.com']
 
 
 # Application definition
@@ -42,13 +42,15 @@ INSTALLED_APPS = [
     'rest_framework',
     'channels',
     'knox',
+    'sorl.thumbnail',
+    'storages',
 
     'custom_auth.apps.CustomAuthConfig',
-    'tennis.apps.TennisConfig'
+    'tennis.apps.TennisConfig',
 ]
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -71,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -81,7 +84,8 @@ WSGI_APPLICATION = 'bonkbonkback.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-if os.environ.get("DJANGO_IS_LOCAL"):
+LOCAL = os.environ.get("DJANGO_IS_LOCAL")
+if LOCAL:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -93,8 +97,8 @@ else:
     DATABASES = {
     'default': dj_database_url.config(),
 }
-    DATABASES['default'] = dj_database_url.config()
-    DATABASES['default'] = dj_database_url.config(default=DATABASE_URL)
+    THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
+    THUMBNAIL_REDIS_URL = os.environ.get('REDIS_TLS_URL')
 
 
 # Password validation
@@ -130,9 +134,31 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
+if LOCAL:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = BASE_DIR / 'static/'
 
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'static/'
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media/'
+else:
+    AWS_ACCESS_KEY_ID = os.environ.get('BUCKETEER_AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('BUCKETEER_AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKETEER_BUCKET_NAME')
+    AWS_S3_REGION_NAME = os.environ.get('BUCKETEER_AWS_REGION')
+    AWS_DEFAULT_ACL = None
+    AWS_S3_SIGNATURE_VERSION = os.environ.get('S3_SIGNATURE_VERSION', 's3v4')
+    AWS_S3_ENDPOINT_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+
+    STATIC_DEFAULT_ACL = 'public-read'
+    STATIC_LOCATION = 'static'
+    STATIC_URL = f'{AWS_S3_ENDPOINT_URL}/{STATIC_LOCATION}/'
+    STATICFILES_STORAGE = 'utils.storage_backends.StaticStorage'
+    PUBLIC_MEDIA_DEFAULT_ACL = 'public-read'
+    PUBLIC_MEDIA_LOCATION = 'media/public'
+
+    MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{PUBLIC_MEDIA_LOCATION}/'
+    DEFAULT_FILE_STORAGE = 'example.utils.storage_backends.PublicMediaStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -165,4 +191,4 @@ REST_KNOX = {
 
 AUTH_USER_MODEL = 'custom_auth.User'
 
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'https://bonk-bonk.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://bonk-bonk.herokuapp.com']

@@ -1,9 +1,18 @@
 from rest_framework import serializers, validators
+
+from custom_auth.validators import max_image_size_validator
 from .models import User
 from django.contrib.auth.password_validation import validate_password
+from sorl.thumbnail import get_thumbnail as sorl_get_thumbnail
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, validators=(validate_password,))
+    thumbnail = serializers.SerializerMethodField()
+    photo = serializers.ImageField(write_only=True, validators=(max_image_size_validator,))
+
+    def get_thumbnail(self, instance):
+        if instance.photo:
+            return sorl_get_thumbnail(instance.photo, '124x124', quality=99).url
 
     def create(self, validated_data):
         password = validated_data.pop('password')
@@ -21,9 +30,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'paternal_name', 'email', 'elo', 'password')
-        read_only_fields = ('elo', 'id')
-        write_only_fields = ('password',)
+        fields = ('id', 'username', 'first_name', 'last_name', 'paternal_name', 'email', 'elo', 'password', 'thumbnail', 'photo')
+        read_only_fields = ('elo', 'id', 'thumbnail')
+        write_only_fields = ('password','photo')
 
 
 class UsernameValidationSerializer(serializers.Serializer):

@@ -98,7 +98,7 @@ else:
     'default': dj_database_url.config(),
 }
     THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
-    THUMBNAIL_REDIS_URL = os.environ.get('REDIS_TLS_URL')
+    THUMBNAIL_REDIS_URL = os.environ.get('REDIS_URL')
 
 
 # Password validation

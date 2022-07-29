@@ -4,6 +4,7 @@ from custom_auth.validators import max_image_size_validator
 from .models import User
 from django.contrib.auth.password_validation import validate_password
 from sorl.thumbnail import get_thumbnail as sorl_get_thumbnail
+from sorl.thumbnail import delete as sorl_delete
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, validators=(validate_password,))
@@ -26,6 +27,9 @@ class UserSerializer(serializers.ModelSerializer):
         if password:
             del validated_data['password']
             user.set_password(password)
+        photo = validated_data['photo']
+        if photo:
+            sorl_delete(user.photo)
         return super().update(user, validated_data)
 
     class Meta:

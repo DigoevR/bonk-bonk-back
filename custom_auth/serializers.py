@@ -27,7 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
         if password:
             del validated_data['password']
             user.set_password(password)
-        photo = validated_data['photo']
+        photo = validated_data.get('photo')
         if photo:
             sorl_delete(user.photo)
         return super().update(user, validated_data)

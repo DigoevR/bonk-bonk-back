@@ -155,7 +155,7 @@ else:
     STATIC_URL = f'{AWS_S3_ENDPOINT_URL}/{STATIC_LOCATION}/'
     STATICFILES_STORAGE = 'utils.storage_backends.StaticStorage'
     PUBLIC_MEDIA_DEFAULT_ACL = 'public-read'
-    PUBLIC_MEDIA_LOCATION = 'media/public'
+    PUBLIC_MEDIA_LOCATION = 'public/media'
 
     MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'utils.storage_backends.PublicMediaStorage'

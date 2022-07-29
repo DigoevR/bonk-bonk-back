@@ -414,11 +414,19 @@ components:
         password:
           type: string
           writeOnly: true
+        thumbnail:
+          type: string
+          readOnly: true
+        photo:
+          type: string
+          format: binary
+          writeOnly: true
       required:
       - username
       - first_name
       - last_name
       - password
+      - photo
     Match:
       type: object
       properties:
@@ -428,8 +436,6 @@ components:
           - 3
           - 5
           type: integer
-          minimum: 0
-          maximum: 32767
         opponent_id:
           type: integer
           writeOnly: true
@@ -479,11 +485,19 @@ components:
                   password:
                     type: string
                     writeOnly: true
+                  thumbnail:
+                    type: string
+                    readOnly: true
+                  photo:
+                    type: string
+                    format: binary
+                    writeOnly: true
                 required:
                 - username
                 - first_name
                 - last_name
                 - password
+                - photo
                 readOnly: true
               loser:
                 type: object
@@ -513,11 +527,19 @@ components:
                   password:
                     type: string
                     writeOnly: true
+                  thumbnail:
+                    type: string
+                    readOnly: true
+                  photo:
+                    type: string
+                    format: binary
+                    writeOnly: true
                 required:
                 - username
                 - first_name
                 - last_name
                 - password
+                - photo
                 readOnly: true
               winner_score:
                 type: string
@@ -559,11 +581,19 @@ components:
             password:
               type: string
               writeOnly: true
+            thumbnail:
+              type: string
+              readOnly: true
+            photo:
+              type: string
+              format: binary
+              writeOnly: true
           required:
           - username
           - first_name
           - last_name
           - password
+          - photo
           readOnly: true
         loser:
           type: object
@@ -593,11 +623,19 @@ components:
             password:
               type: string
               writeOnly: true
+            thumbnail:
+              type: string
+              readOnly: true
+            photo:
+              type: string
+              format: binary
+              writeOnly: true
           required:
           - username
           - first_name
           - last_name
           - password
+          - photo
           readOnly: true
         elo_change:
           type: integer

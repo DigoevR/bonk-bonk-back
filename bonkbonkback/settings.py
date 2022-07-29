@@ -138,7 +138,7 @@ if LOCAL:
     STATIC_URL = '/static/'
     STATIC_ROOT = BASE_DIR / 'static/'
 
-    MEDIA_URL = '/media/'
+    MEDIA_URL = 'http://localhost:8000/media/'
     MEDIA_ROOT = BASE_DIR / 'media/'
 else:
     AWS_ACCESS_KEY_ID = os.environ.get('BUCKETEER_AWS_ACCESS_KEY_ID')

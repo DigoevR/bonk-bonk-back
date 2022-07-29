@@ -30,9 +30,9 @@ urlpatterns = [
         extra_context={'schema_url':'static/openapi-schema.yml'},
     ), name='swagger-ui'),
 ]
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.LOCAL:
-    urlpatterns += static(settings.MEDIA_URL,
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static('/media/',
                           document_root=settings.MEDIA_ROOT)
     

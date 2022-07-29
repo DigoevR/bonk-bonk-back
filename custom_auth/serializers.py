@@ -9,7 +9,7 @@ from sorl.thumbnail import delete as sorl_delete
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, validators=(validate_password,))
     thumbnail = serializers.SerializerMethodField()
-    photo = serializers.ImageField(write_only=True, validators=(max_image_size_validator,))
+    photo = serializers.ImageField(write_only=True, validators=(max_image_size_validator,), required=False)
 
     def get_thumbnail(self, instance):
         if instance.photo:

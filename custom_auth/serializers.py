@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_thumbnail(self, instance):
         if instance.photo:
-            return sorl_get_thumbnail(instance.photo, '124x124', quality=99).url
+            return sorl_get_thumbnail(instance.photo, '124x124', quality=99, crop='center').url
 
     def create(self, validated_data):
         password = validated_data.pop('password')

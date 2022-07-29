@@ -158,7 +158,7 @@ else:
     PUBLIC_MEDIA_LOCATION = 'media/public'
 
     MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{PUBLIC_MEDIA_LOCATION}/'
-    DEFAULT_FILE_STORAGE = 'example.utils.storage_backends.PublicMediaStorage'
+    DEFAULT_FILE_STORAGE = 'utils.storage_backends.PublicMediaStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

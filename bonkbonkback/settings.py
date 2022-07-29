@@ -147,11 +147,11 @@ else:
     AWS_S3_REGION_NAME = os.environ.get('BUCKETEER_AWS_REGION')
     AWS_DEFAULT_ACL = None
     # AWS_S3_SIGNATURE_VERSION = os.environ.get('S3_SIGNATURE_VERSION', 's3v4')
-    AWS_S3_ENDPOINT_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_ENDPOINT_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
     STATIC_DEFAULT_ACL = 'public-read'
-    STATIC_LOCATION = 'static'
+    STATIC_LOCATION = 'public/static'
     STATIC_URL = f'{AWS_S3_ENDPOINT_URL}/{STATIC_LOCATION}/'
     STATICFILES_STORAGE = 'utils.storage_backends.StaticStorage'
     PUBLIC_MEDIA_DEFAULT_ACL = 'public-read'

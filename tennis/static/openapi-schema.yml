@@ -426,7 +426,6 @@ components:
       - first_name
       - last_name
       - password
-      - photo
     Match:
       type: object
       properties:
@@ -497,7 +496,6 @@ components:
                 - first_name
                 - last_name
                 - password
-                - photo
                 readOnly: true
               loser:
                 type: object
@@ -539,7 +537,6 @@ components:
                 - first_name
                 - last_name
                 - password
-                - photo
                 readOnly: true
               winner_score:
                 type: string
@@ -593,7 +590,6 @@ components:
           - first_name
           - last_name
           - password
-          - photo
           readOnly: true
         loser:
           type: object
@@ -635,13 +631,16 @@ components:
           - first_name
           - last_name
           - password
-          - photo
           readOnly: true
         elo_change:
           type: integer
           readOnly: true
         is_confirmed:
           type: boolean
+          readOnly: true
+        created:
+          type: string
+          format: date-time
           readOnly: true
       required:
       - match_type

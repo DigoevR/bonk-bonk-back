@@ -57,6 +57,6 @@ class MatchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Match
-        fields = ('match_type', 'opponent_id', 'games', 'id', 'winner', 'loser', 'elo_change', 'is_confirmed')
+        fields = ('match_type', 'opponent_id', 'games', 'id', 'winner', 'loser', 'elo_change', 'is_confirmed', 'created')
         write_only_fields = ('opponent_id')
-        read_only_fields = ('id', 'winner', 'loser', 'elo_change', 'is_confirmed')
+        read_only_fields = ('id', 'winner', 'loser', 'elo_change', 'is_confirmed', 'created')

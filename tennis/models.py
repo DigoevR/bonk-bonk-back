@@ -14,6 +14,7 @@ class Match(models.Model):
     is_confirmed = models.BooleanField(default=False)
     elo_change = models.SmallIntegerField()
     match_type = models.PositiveSmallIntegerField(choices=MatchType.choices)
+    created = models.DateTimeField(auto_now_add=True)
 
     @property
     def winner(self):

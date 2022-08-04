@@ -27,6 +27,7 @@ class MatchSerializer(serializers.ModelSerializer):
     opponent_id = serializers.PrimaryKeyRelatedField(source='confirming_player', required=True, queryset=User.objects.all(), write_only=True)
     winner = UserSerializer(read_only=True)
     loser = UserSerializer(read_only=True)
+    confirming_player = UserSerializer(read_only=True)
 
     def validate(self, attrs):
         validation = super().validate(attrs)
@@ -57,6 +58,6 @@ class MatchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Match
-        fields = ('match_type', 'opponent_id', 'games', 'id', 'winner', 'loser', 'elo_change', 'is_confirmed', 'created')
+        fields = ('match_type', 'opponent_id', 'games', 'id', 'winner', 'loser', 'elo_change', 'is_confirmed', 'created', 'confirming_player')
         write_only_fields = ('opponent_id')
-        read_only_fields = ('id', 'winner', 'loser', 'elo_change', 'is_confirmed', 'created')
+        read_only_fields = ('id', 'winner', 'loser', 'elo_change', 'is_confirmed', 'created', 'confirming_player')

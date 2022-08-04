@@ -664,6 +664,47 @@ components:
           type: string
           format: date-time
           readOnly: true
+        confirming_player:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            username:
+              type: string
+              maxLength: 40
+            first_name:
+              type: string
+              maxLength: 40
+            last_name:
+              type: string
+              maxLength: 40
+            paternal_name:
+              type: string
+              maxLength: 40
+            email:
+              type: string
+              format: email
+              maxLength: 254
+            elo:
+              type: integer
+              readOnly: true
+            password:
+              type: string
+              writeOnly: true
+            thumbnail:
+              type: string
+              readOnly: true
+            photo:
+              type: string
+              format: binary
+              writeOnly: true
+          required:
+          - username
+          - first_name
+          - last_name
+          - password
+          readOnly: true
       required:
       - match_type
       - opponent_id

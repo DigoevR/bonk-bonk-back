@@ -95,3 +95,15 @@ class MatchUnconfirmedListView(ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return Match.objects.filter(is_confirmed=False, confirming_player=user)
+
+
+class MatchesWithUserListView(ListAPIView):
+    """
+    Returns list of matches of current user vs user with given id
+    """
+    permission_classes = (IsAuthenticated,)
+    serializer_class = MatchSerializer
+    def get_queryset(self):
+        user = self.request.user
+        other_user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+        return Match.objects.filter((Q(requesting_player=user, confirming_player=other_user) | Q(requesting_player=other_user, confirming_player=user)))

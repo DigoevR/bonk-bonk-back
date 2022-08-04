@@ -8,12 +8,12 @@ class Match(models.Model):
         BO3 = 3, 'Best of 3'
         BO5 = 5, 'Best of 5'
     
-    requesting_player = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='matches', on_delete=models.CASCADE)
-    confirming_player = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='_matches', on_delete=models.CASCADE)
+    requesting_player = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='matches', on_delete=models.CASCADE, db_index=True)
+    confirming_player = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='_matches', on_delete=models.CASCADE, db_index=True)
     result = models.BooleanField()
-    is_confirmed = models.BooleanField(default=False)
+    is_confirmed = models.BooleanField(default=False, db_index=True)
     elo_change = models.SmallIntegerField()
-    match_type = models.PositiveSmallIntegerField(choices=MatchType.choices)
+    match_type = models.PositiveSmallIntegerField(choices=MatchType.choices, db_index=True)
     created = models.DateTimeField(auto_now_add=True)
 
     @property

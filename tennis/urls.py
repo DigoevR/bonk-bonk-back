@@ -11,4 +11,5 @@ urlpatterns = [
     path('match/<int:pk>/', dv.MatchDetailConfirmRejectView.as_view(), name='match_detail_confirm_reject'),
     path('matches/', dv.MatchListCreateView.as_view(), name='match_list_create'),
     path('matches/unconfirmed/', dv.MatchUnconfirmedListView.as_view(), name='match_unconfirmed_list'),
+    path('user/<int:pk>/matches/', dv.MatchesWithUserListView.as_view(), name='matches_with_user'),
 ]

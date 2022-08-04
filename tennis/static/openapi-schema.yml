@@ -273,6 +273,28 @@ paths:
           description: ''
       tags:
       - api
+  /api/user/{id}/matches/:
+    get:
+      operationId: listMatchs
+      description: Returns list of matches of current user vs user with given id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Match'
+          description: ''
+      tags:
+      - api
   /api/auth/login/:
     post:
       operationId: createLogin

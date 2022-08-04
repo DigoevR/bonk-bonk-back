@@ -10,7 +10,7 @@ class Match(models.Model):
     
     requesting_player = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='matches', on_delete=models.CASCADE, db_index=True)
     confirming_player = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='_matches', on_delete=models.CASCADE, db_index=True)
-    result = models.BooleanField()
+    result = models.BooleanField(db_index=True)
     is_confirmed = models.BooleanField(default=False, db_index=True)
     elo_change = models.SmallIntegerField()
     match_type = models.PositiveSmallIntegerField(choices=MatchType.choices, db_index=True)

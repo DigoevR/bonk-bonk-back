@@ -99,6 +99,12 @@ else:
 }
     THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
     THUMBNAIL_REDIS_URL = os.environ.get('REDIS_URL')
+    CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': os.environ.get('REDIS_URL')
+    }
+}
 
 
 # Password validation
